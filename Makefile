@@ -18,6 +18,7 @@ LIB_DIR = libft/
 
 #COLORS
 GREEN=\033[0;32m
+LGREEN=\033[1;92m
 CIAN=\033[36m
 RED=\033[31m
 YELLOW=\033[33m
@@ -29,18 +30,21 @@ all: $(NAME)
 
 $(NAME): $(OBJS)
 	@echo "${CIAN}Compiling...${NC}"
-	@make -C $(LIB_DIR)
+	@make -s -C $(LIB_DIR)
 	@$(CC) $(CFLAGS) $(OBJS) $(INCLUDE) -o $(NAME)
-	@echo "${GREEN}Program compiled✅${NC}"
+	@echo "${LGREEN}Program compiled✅${NC}"
+
+$(OBJS): %.o: %.c
+	@$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
 	@$(RM) $(OBJS)
-	@make clean -C $(LIB_DIR)
+	@make -s clean -C $(LIB_DIR)
 	@echo "${MAGENTA}Objects deleted🧹${NC}"
 
 fclean: clean
 	@$(RM) $(NAME)
-	@make fclean -C $(LIB_DIR)
+	@make -s fclean -C $(LIB_DIR)
 	@echo "${MAGENTA}All clean✨${NC}"
 
 re:	fclean all

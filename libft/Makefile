@@ -30,6 +30,7 @@ RM = rm -f
 
 #COLORS
 GREEN=\033[0;32m
+LGREEN=\033[1;32m
 CIAN=\033[36m
 RED=\033[31m
 YELLOW=\033[33m
@@ -41,7 +42,7 @@ all: $(NAME)
 
 $(NAME): $(OBJS) $(O_PRINTF) $(O_GNL)
 	@$(AR) $(NAME) $(OBJS) $(O_PRINTF) $(O_GNL)
-	@echo "${YELLOW}Compiled LIBFT successfully.${NC}"
+	@echo "${GREEN}Compiled LIBFT successfully.${NC}"
 
 $(OBJS): %.o: %.c
 	@$(CC) $(CFLAGS) -c $< -o $@
