@@ -12,13 +12,28 @@
 
 #include "../include/pipex.h"
 
+char *get_path(char **envp)
+{
+    char *path;
+
+    path = NULL;
+    while(envp)
+    {
+        if(ft_strnstr(*envp, "PATH=", 5))
+        {
+            path = *envp + 5;
+            break;
+        }
+        envp++;
+    }
+    ft_printf("%s", path);
+    return(path);
+}
+
 int main(int argc, char **argv, char **envp)
 {
-    for (int i = 0; envp[i] != NULL; i++)
-    {
-        printf("%s\n", envp[i]);
-    }
     argc = 1 + argc;
     (void)argv;
+    (void)envp;
     return 0;
 }
