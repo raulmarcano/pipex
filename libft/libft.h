@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rmarcano <rmarcano@student.42madrid>       +#+  +:+       +#+        */
+/*   By: rmarcano <rmarcano@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 12:21:41 by rmarcano          #+#    #+#             */
-/*   Updated: 2024/02/01 18:02:00 by rmarcano         ###   ########.fr       */
+/*   Updated: 2024/05/07 15:06:51 by rmarcano         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,5 +81,14 @@ t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *));
 	//Complementary Functions (Post-eval)
 int		ft_sqrt(int number);
 int		ft_isprint(int c);
+
+	//GNL
+# ifndef BUFFER_SIZE
+#  define BUFFER_SIZE   42
+# endif
+
+char	*read_n_buffer(char *buf, int fd);
+char	*get_next_line(int fd);
+char	*line_cutter(char **stc);
 
 #endif

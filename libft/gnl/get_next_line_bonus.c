@@ -3,30 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rmarcano <rmarcano@student.42madrid>       +#+  +:+       +#+        */
+/*   By: rmarcano <rmarcano@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 17:27:51 by rmarcano          #+#    #+#             */
-/*   Updated: 2024/02/19 17:27:53 by rmarcano         ###   ########.fr       */
+/*   Updated: 2024/05/07 15:08:34 by rmarcano         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#include "get_next_line_bonus.h"
 
-void	*ft_calloc(size_t count, size_t size)
-{
-	char		*arr;
-	size_t		i;
-
-	arr = malloc(count * size);
-	if (arr == NULL)
-		return (NULL);
-	i = 0;
-	while (i < (count * size))
-	{
-		arr[i] = 0;
-		i++;
-	}
-	return (arr);
-}
+#include "../libft.h"
 
 char	*read_n_buffer(char *buf, int fd)
 {

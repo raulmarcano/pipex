@@ -22,7 +22,7 @@ SRC_PRINTF = printf/ft_printf.c printf/letters.c printf/numbers.c
 
 O_PRINTF = $(SRC_PRINTF:.c=.o)
 
-SRC_GNL = gnl/get_next_line_bonus.c gnl/get_next_line_utils_bonus.c
+SRC_GNL = gnl/get_next_line_bonus.c
 
 O_GNL = $(SRC_GNL:.c=.o)
 
