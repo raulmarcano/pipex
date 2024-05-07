@@ -6,7 +6,7 @@
 /*   By: rmarcano <rmarcano@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 16:10:09 by rmarcano          #+#    #+#             */
-/*   Updated: 2024/05/07 17:52:38 by rmarcano         ###   ########.fr       */
+/*   Updated: 2024/05/07 20:05:48 by rmarcano         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ void    get_real_path(char **all_path, char **cmd, char **real_path)
         free(*real_path);
         i++;
     }
-    return ;
+    return;
 }
 
 void free_array(char **array)
@@ -68,14 +68,23 @@ int main(int argc, char **argv, char **env)
     char **all_path;
     char **cmd;
     char *real_path;
+	int fd_infile;
+	int fd_outfile;
     
+    fd_infile = open(argv[1], O_RDONLY, 0777);
+	if (fd_infile == -1)
+		perror("Can't access infile");
     real_path = NULL;
     get_path(&all_path, env);
     cmd = ft_split(argv[2], ' ');
     get_real_path(all_path, cmd, &real_path);
     free_array(all_path);
-    //ft_printf("Real full path: %s\n", real_path);
-    //execve(real_path, cmd, NULL);
+    ft_printf("Real full path: %s\n", real_path);
+	
+    fd_outfile = open(argv[4], O_WRONLY);
+	dup2(fd_outfile, STDOUT_FILENO);
+	execve(real_path, cmd, NULL);
+	
     free_array(cmd);
     free(real_path);
     (void)argc;

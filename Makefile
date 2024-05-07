@@ -50,6 +50,6 @@ fclean: clean
 re:	fclean all
 
 g3:
-	gcc src/*.c libft/*.c -g3 -fsanitize="address" -o pipex
+	gcc src/*.c libft/*.c libft/printf/*.c -g3 -fsanitize="address" -o pipex
 
 .PHONY: all clean fclean re g3
