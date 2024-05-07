@@ -6,7 +6,7 @@
 /*   By: rmarcano <rmarcano@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 18:20:50 by rmarcano          #+#    #+#             */
-/*   Updated: 2024/05/07 15:08:55 by rmarcano         ###   ########.fr       */
+/*   Updated: 2024/05/07 17:54:44 by rmarcano         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ char	*ft_strjoin(char const *s1, char const *s2)
 		j++;
 	}
 	cat[i] = '\0';
-	free((char *)s1);
+	//free((char *)s1);
 	return (cat);
 }
 /*

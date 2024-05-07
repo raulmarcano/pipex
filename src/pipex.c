@@ -6,43 +6,80 @@
 /*   By: rmarcano <rmarcano@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 16:10:09 by rmarcano          #+#    #+#             */
-/*   Updated: 2024/05/06 18:36:49 by rmarcano         ###   ########.fr       */
+/*   Updated: 2024/05/07 17:52:38 by rmarcano         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/pipex.h"
 
-char **get_path(char **envp)
+void    get_path(char ***all_path, char **env)
 {
     char *path;
-    char **path_splitted;
 
-    while(*envp)
+    while(*env)
     {
-        if(ft_strnstr(*envp, "PATH=", 5))
+        if(ft_strnstr(*env, "PATH=", 5))
         {
-            path = *envp + 5;
+            path = *env + 5;
             break;
         }
-        envp++;
+        env++;
     }
-    path_splitted = ft_split(path, ':');
-    return(path_splitted);
+    *all_path = ft_split(path, ':');
+    return ;
 }
 
-int main(int argc, char **argv, char **envp)
+void    get_real_path(char **all_path, char **cmd, char **real_path)
 {
-    get_path(envp);
-    char **cmd;
-
-    cmd = ft_split(argv[2], ' ');
-    while (cmd)
+    int i;
+    char *aux_path;
+    
+    aux_path = NULL;
+    i = 0;
+    while (all_path[i])
     {
-        ft_printf("%s\n", *cmd);
-        cmd++;
+        aux_path = ft_strjoin(all_path[i], "/");
+        *real_path = ft_strjoin(aux_path, cmd[0]);
+        free(aux_path);
+        if (access(*real_path, X_OK) != -1)
+            break;
+        free(*real_path);
+        i++;
     }
-    argc = 1 + argc;
+    return ;
+}
+
+void free_array(char **array)
+{
+    int i = 0;
+
+    while(array[i])
+    {
+        if(array)
+            free(array[i]);
+        i++;
+    }
+    free(array);
+}
+
+
+int main(int argc, char **argv, char **env)
+{
+    char **all_path;
+    char **cmd;
+    char *real_path;
+    
+    real_path = NULL;
+    get_path(&all_path, env);
+    cmd = ft_split(argv[2], ' ');
+    get_real_path(all_path, cmd, &real_path);
+    free_array(all_path);
+    //ft_printf("Real full path: %s\n", real_path);
+    //execve(real_path, cmd, NULL);
+    free_array(cmd);
+    free(real_path);
+    (void)argc;
     (void)argv;
-    (void)envp;
-    return 0;
+    (void)env;
+    return (0);
 }
