@@ -6,7 +6,7 @@
 /*   By: rmarcano <rmarcano@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 16:10:09 by rmarcano          #+#    #+#             */
-/*   Updated: 2024/05/07 20:05:48 by rmarcano         ###   ########.fr       */
+/*   Updated: 2024/05/08 18:14:30 by rmarcano         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,25 +70,48 @@ int main(int argc, char **argv, char **env)
     char *real_path;
 	int fd_infile;
 	int fd_outfile;
+    pid_t pid;
+    int fd[2];
+ 
+    pipe(fd);
+	pid = fork();
+	if (pid == -1)
+	{
+		perror("fork");
+		exit(EXIT_FAILURE);
+	}
     
+    close(fd[READ_END]);
     fd_infile = open(argv[1], O_RDONLY, 0777);
 	if (fd_infile == -1)
 		perror("Can't access infile");
+    dup2(fd_infile, STDIN_FILENO);
+    dup2(fd, fd);
+    close(fd[WRITE_END]);
+    close(fd_infile);
+    
+    
+    
     real_path = NULL;
     get_path(&all_path, env);
     cmd = ft_split(argv[2], ' ');
     get_real_path(all_path, cmd, &real_path);
+    
     free_array(all_path);
     ft_printf("Real full path: %s\n", real_path);
-	
-    fd_outfile = open(argv[4], O_WRONLY);
+    fd_outfile = open(argv[4], O_WRONLY, 0777);
 	dup2(fd_outfile, STDOUT_FILENO);
+    close(fd_outfile); 
 	execve(real_path, cmd, NULL);
 	
     free_array(cmd);
     free(real_path);
+
+    if (unlink("../outfile") == 0)
+		printf("File successfully deleted");
+	else
+		printf("Error deleting file");
+    //waitpid(status);
     (void)argc;
-    (void)argv;
-    (void)env;
     return (0);
 }
