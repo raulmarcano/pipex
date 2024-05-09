@@ -90,5 +90,6 @@ int		ft_isprint(int c);
 char	*read_n_buffer(char *buf, int fd);
 char	*get_next_line(int fd);
 char	*line_cutter(char **stc);
+char	*gnl_strjoin(char const *s1, char const *s2);
 
 #endif

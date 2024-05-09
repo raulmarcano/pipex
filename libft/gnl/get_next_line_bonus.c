@@ -31,7 +31,7 @@ char	*read_n_buffer(char *buf, int fd)
 			return (NULL);
 		}
 		aux[size] = '\0';
-		buf = ft_strjoin(buf, aux);
+		buf = gnl_strjoin(buf, aux);
 	}
 	free (aux);
 	return (buf);
