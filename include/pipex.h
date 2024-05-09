@@ -12,13 +12,21 @@
 
 #ifndef PIPEX_H
 # define PIPEX_H
-#include <fcntl.h>
-
+# include <fcntl.h>
 # include "../libft/libft.h"
-# define READ_END 0
-# define WRITE_END 1
 
+# define READ 0
+# define WRITE 1
 
-void    get_path(char ***all_path, char **env);
+	// UTILS
+void	ft_error(void);
+void	get_path(char ***all_path, char **env);
+void	get_real_path(char **all_path, char **cmd, char **real_path);
+void	free_array(char **array);
+void	execute_cmd(char ***all_path, char *comand);
+
+	//PROCESSES
+void	parent_process(int *fd, char **argv, char **all_path);
+void	child_process(int *fd, char **argv, char **all_path);
 
 #endif

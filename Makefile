@@ -4,7 +4,7 @@ CC = gcc
 
 CFLAGS = -Wall -Wextra -Werror
 
-SRC = src/pipex.c
+SRC = src/pipex.c src/utils.c
 		
 OBJS = $(SRC:.c=.o)
 

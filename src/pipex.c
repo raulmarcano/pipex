@@ -12,106 +12,52 @@
 
 #include "../include/pipex.h"
 
-void    get_path(char ***all_path, char **env)
+void	child_process(int *fd, char **argv, char **all_path)
 {
-    char *path;
+	int	fd_infile;
 
-    while(*env)
-    {
-        if(ft_strnstr(*env, "PATH=", 5))
-        {
-            path = *env + 5;
-            break;
-        }
-        env++;
-    }
-    *all_path = ft_split(path, ':');
-    return ;
-}
-
-void    get_real_path(char **all_path, char **cmd, char **real_path)
-{
-    int i;
-    char *aux_path;
-    
-    aux_path = NULL;
-    i = 0;
-    while (all_path[i])
-    {
-        aux_path = ft_strjoin(all_path[i], "/");
-        *real_path = ft_strjoin(aux_path, cmd[0]);
-        free(aux_path);
-        if (access(*real_path, X_OK) != -1)
-            break;
-        free(*real_path);
-        i++;
-    }
-    return;
-}
-
-void free_array(char **array)
-{
-    int i = 0;
-
-    while(array[i])
-    {
-        if(array)
-            free(array[i]);
-        i++;
-    }
-    free(array);
-}
-
-
-int main(int argc, char **argv, char **env)
-{
-    char **all_path;
-    char **cmd;
-    char *real_path;
-	int fd_infile;
-	int fd_outfile;
-    pid_t pid;
-    int fd[2];
- 
-    pipe(fd);
-	pid = fork();
-	if (pid == -1)
-	{
-		perror("fork");
-		exit(EXIT_FAILURE);
-	}
-    
-    close(fd[READ_END]);
-    fd_infile = open(argv[1], O_RDONLY, 0777);
+	fd_infile = open(argv[1], O_RDONLY, 0777);
 	if (fd_infile == -1)
 		perror("Can't access infile");
-    dup2(fd_infile, STDIN_FILENO);
-    dup2(fd, fd);
-    close(fd[WRITE_END]);
-    close(fd_infile);
-    
-    
-    
-    real_path = NULL;
-    get_path(&all_path, env);
-    cmd = ft_split(argv[2], ' ');
-    get_real_path(all_path, cmd, &real_path);
-    
-    free_array(all_path);
-    ft_printf("Real full path: %s\n", real_path);
-    fd_outfile = open(argv[4], O_WRONLY, 0777);
-	dup2(fd_outfile, STDOUT_FILENO);
-    close(fd_outfile); 
-	execve(real_path, cmd, NULL);
-	
-    free_array(cmd);
-    free(real_path);
+	dup2(fd[WRITE], STDOUT_FILENO);
+	dup2(fd_infile, STDIN_FILENO);
+	close(fd[READ]);
+	execute_cmd(&all_path, argv[2]);
+}
 
-    if (unlink("../outfile") == 0)
-		printf("File successfully deleted");
+void	parent_process(int *fd, char **argv, char **all_path)
+{
+	int	fd_outfile;
+
+	fd_outfile = open(argv[4], O_WRONLY | O_CREAT | O_TRUNC, 0777);
+	if (fd_outfile == -1)
+		perror("Can't access outfile");
+	dup2(fd[READ], STDIN_FILENO);
+	dup2(fd_outfile, STDOUT_FILENO);
+	close(fd[WRITE]);
+	execute_cmd(&all_path, argv[3]);
+}
+
+int	main(int argc, char **argv, char **env)
+{
+	int			fd[2];
+	char		**all_path;
+	pid_t		pid;
+
+	if (argc != 5)
+		ft_error();
 	else
-		printf("Error deleting file");
-    //waitpid(status);
-    (void)argc;
-    return (0);
+	{
+		if (pipe(fd) == -1)
+			ft_error();
+		pid = fork();
+		if (pid == -1)
+			ft_error();
+		get_path(&all_path, env);
+		if (pid == 0)
+			child_process(fd, argv, all_path);
+		waitpid(pid, NULL, 0);
+		parent_process(fd, argv, all_path);
+	}
+	return (0);
 }
