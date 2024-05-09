@@ -37,7 +37,6 @@ char	*ft_strjoin(char const *s1, char const *s2)
 		j++;
 	}
 	cat[i] = '\0';
-	//free((char *)s1);
 	return (cat);
 }
 
