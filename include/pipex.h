@@ -6,13 +6,14 @@
 /*   By: rmarcano <rmarcano@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 13:43:46 by rmarcano          #+#    #+#             */
-/*   Updated: 2024/05/08 14:53:15 by rmarcano         ###   ########.fr       */
+/*   Updated: 2024/05/13 11:33:45 by rmarcano         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PIPEX_H
 # define PIPEX_H
 # include <fcntl.h>
+#include <sys/wait.h>
 # include "../libft/libft.h"
 
 # define READ 0
