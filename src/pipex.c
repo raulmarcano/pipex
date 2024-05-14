@@ -6,13 +6,13 @@
 /*   By: rmarcano <rmarcano@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 16:10:09 by rmarcano          #+#    #+#             */
-/*   Updated: 2024/05/14 16:58:51 by rmarcano         ###   ########.fr       */
+/*   Updated: 2024/05/14 19:32:04 by rmarcano         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/pipex.h"
 
-void	child_process(int *fd, char **argv, char **all_path)
+void	child_process(int *fd, char **argv, char ***all_path)
 {
 	int	fd_infile;
 
@@ -25,10 +25,10 @@ void	child_process(int *fd, char **argv, char **all_path)
 	dup2(fd[WRITE], STDOUT_FILENO);
 	dup2(fd_infile, STDIN_FILENO);
 	close(fd[READ]);
-	execute_cmd(&all_path, argv[2]);
+	execute_cmd(all_path, argv[2]);
 }
 
-void	parent_process(int *fd, char **argv, char **all_path)
+void	parent_process(int *fd, char **argv, char ***all_path)
 {
 	int	fd_outfile;
 
@@ -41,7 +41,7 @@ void	parent_process(int *fd, char **argv, char **all_path)
 	dup2(fd[READ], STDIN_FILENO);
 	dup2(fd_outfile, STDOUT_FILENO);
 	close(fd[WRITE]);
-	execute_cmd(&all_path, argv[3]);
+	execute_cmd(all_path, argv[3]);
 }
 
 int	main(int argc, char **argv, char **env)
@@ -62,10 +62,13 @@ int	main(int argc, char **argv, char **env)
 			ft_error();
 		get_path(&all_path, env);
 		if (pid == 0)
-			child_process(fd, argv, all_path);
+			child_process(fd, argv, &all_path);
+		free_array(&all_path);
 		get_path(&all_path, env);
-		parent_process(fd, argv, all_path);
+		parent_process(fd, argv, &all_path);
+		free_array(&all_path);
 		waitpid(pid, &status, 0);
 	}
+	free_array(&all_path);
 	return (status);
 }
