@@ -6,7 +6,7 @@
 /*   By: rmarcano <rmarcano@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/09 14:45:03 by rmarcano          #+#    #+#             */
-/*   Updated: 2024/05/13 20:16:14 by rmarcano         ###   ########.fr       */
+/*   Updated: 2024/05/14 16:56:31 by rmarcano         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,12 +26,13 @@ void	get_path(char ***all_path, char **env)
 	{
 		if (ft_strnstr(*env, "PATH=", 5))
 		{
-			path = *env + 5;
+			path = ft_strdup(*env + 5);
 			break ;
 		}
 		env++;
 	}
 	*all_path = ft_split(path, ':');
+	free(path);
 }
 
 void	get_real_path(char **all_path, char **cmd, char **real_path)
@@ -41,7 +42,7 @@ void	get_real_path(char **all_path, char **cmd, char **real_path)
 
 	aux_path = NULL;
 	i = 0;
-	if (access(cmd[0], X_OK) != -1)
+	if (access(cmd[0], X_OK) == 0)
 	{
 		*real_path = cmd[0];
 		return ;
@@ -51,7 +52,7 @@ void	get_real_path(char **all_path, char **cmd, char **real_path)
 		aux_path = ft_strjoin(all_path[i], "/");
 		*real_path = ft_strjoin(aux_path, cmd[0]);
 		free(aux_path);
-		if (access(*real_path, X_OK) != -1)
+		if (access(*real_path, X_OK) == 0)
 			return ;
 		free(*real_path);
 		i++;
@@ -81,9 +82,9 @@ void	execute_cmd(char ***all_path, char *comand)
 
 	real_path = NULL;
 	cmd = ft_split(comand, ' ');
-	get_real_path(*all_path, cmd, &real_path); //if...
+	get_real_path(*all_path, cmd, &real_path);
 	free_array(*all_path);
-	execve(real_path, cmd, NULL);
+	//execve(real_path, cmd, NULL);
 	free_array(cmd);
 	free(real_path);
 }

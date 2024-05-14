@@ -6,7 +6,7 @@
 /*   By: rmarcano <rmarcano@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 16:10:09 by rmarcano          #+#    #+#             */
-/*   Updated: 2024/05/13 19:54:00 by rmarcano         ###   ########.fr       */
+/*   Updated: 2024/05/14 16:58:51 by rmarcano         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,9 +63,9 @@ int	main(int argc, char **argv, char **env)
 		get_path(&all_path, env);
 		if (pid == 0)
 			child_process(fd, argv, all_path);
+		get_path(&all_path, env);
 		parent_process(fd, argv, all_path);
 		waitpid(pid, &status, 0);
-	//	status = WEXITSTATUS(status);		funciona igual
 	}
 	return (status);
 }
