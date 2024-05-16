@@ -6,7 +6,7 @@
 /*   By: rmarcano <rmarcano@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/09 14:45:03 by rmarcano          #+#    #+#             */
-/*   Updated: 2024/05/14 19:30:12 by rmarcano         ###   ########.fr       */
+/*   Updated: 2024/05/16 15:55:11 by rmarcano         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,14 +40,13 @@ void	get_real_path(char **all_path, char **cmd, char **real_path)
 	int		i;
 	char	*aux_path;
 
-	aux_path = NULL;
 	i = 0;
-	if (access(cmd[0], X_OK) == 0)
+	if (access(cmd[0], X_OK) == 0 && *cmd)
 	{
 		*real_path = cmd[0];
 		return ;
 	}
-	while (all_path[i])
+	while (all_path[i] && *cmd)
 	{
 		aux_path = ft_strjoin(all_path[i], "/");
 		*real_path = ft_strjoin(aux_path, cmd[0]);
@@ -58,6 +57,8 @@ void	get_real_path(char **all_path, char **cmd, char **real_path)
 		i++;
 	}
 	perror("Command not found");
+	if (!*cmd)
+		exit(0);
 	exit(127);
 }
 
@@ -86,7 +87,7 @@ void	execute_cmd(char ***all_path, char *comand)
 	real_path = NULL;
 	cmd = ft_split(comand, ' ');
 	get_real_path(*all_path, cmd, &real_path);
-	//execve(real_path, cmd, NULL);
+	execve(real_path, cmd, NULL);
 	free_array(&cmd);
 	free(real_path);
 }
