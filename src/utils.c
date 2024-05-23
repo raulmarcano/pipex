@@ -30,6 +30,8 @@ void	get_path(char ***all_path, char **env)
 			path = ft_strdup(*env + 5);
 			break ;
 		}
+		if (ft_strnstr(*env, "TERM=", 5))
+			ft_error(ENXIO);
 		env++;
 	}
 	*all_path = ft_split(path, ':');
