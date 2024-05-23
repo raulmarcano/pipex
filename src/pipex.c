@@ -6,7 +6,7 @@
 /*   By: rmarcano <rmarcano@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 16:10:09 by rmarcano          #+#    #+#             */
-/*   Updated: 2024/05/16 13:13:02 by rmarcano         ###   ########.fr       */
+/*   Updated: 2024/05/23 14:55:25 by rmarcano         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,16 +51,16 @@ int	main(int argc, char **argv, char **env)
 	pid_t		pid;
 	int			status;
 
-	if (argc != 5)
-		ft_error();
+	if (argc != 5 || !*env)
+		ft_error(ENXIO);
 	else
 	{
 		if (pipe(fd) == -1)
-			ft_error();
+			ft_error(EPIPE);
+		get_path(&all_path, env);
 		pid = fork();
 		if (pid == -1)
-			ft_error();
-		get_path(&all_path, env);
+			ft_error(ESRCH);
 		if (pid == 0)
 			child_process(fd, argv, &all_path);
 		parent_process(fd, argv, &all_path);

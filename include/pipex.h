@@ -6,7 +6,7 @@
 /*   By: rmarcano <rmarcano@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 13:43:46 by rmarcano          #+#    #+#             */
-/*   Updated: 2024/05/16 15:18:48 by rmarcano         ###   ########.fr       */
+/*   Updated: 2024/05/23 14:30:40 by rmarcano         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,14 @@
 # define PIPEX_H
 # include <fcntl.h>
 # include <sys/wait.h>
+# include <errno.h>
 # include "../libft/libft.h"
 
 # define READ 0
 # define WRITE 1
 
 	// UTILS
-void	ft_error(void);
+void	ft_error(int error_num);
 void	get_path(char ***all_path, char **env);
 void	get_real_path(char **all_path, char **cmd, char **real_path);
 void	free_array(char ***array);

@@ -6,14 +6,15 @@
 /*   By: rmarcano <rmarcano@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/09 14:45:03 by rmarcano          #+#    #+#             */
-/*   Updated: 2024/05/16 15:55:11 by rmarcano         ###   ########.fr       */
+/*   Updated: 2024/05/23 14:54:11 by rmarcano         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/pipex.h"
 
-void	ft_error(void)
-{
+void	ft_error(int error_num)
+{	
+	errno = error_num;
 	perror("Error");
 	exit(EXIT_FAILURE);
 }
@@ -57,6 +58,7 @@ void	get_real_path(char **all_path, char **cmd, char **real_path)
 		i++;
 	}
 	perror("Command not found");
+	errno = ENOENT;
 	if (!*cmd)
 		exit(0);
 	exit(127);
@@ -65,7 +67,7 @@ void	get_real_path(char **all_path, char **cmd, char **real_path)
 void	free_array(char ***array)
 {
 	int	i;
-
+	
 	if (*array)
 	{	
 		i = 0;
